@@ -4,7 +4,6 @@ import { Ripple } from "./ui/ripple";
 interface ResearchLink {
   href: string;
   label: string;
-  note?: string;
 }
 
 interface ResearchItem {
@@ -24,19 +23,8 @@ const researchItems: ResearchItem[] = [
     provider: "IEEE ACROSET 2025",
     links: [
       {
-        href: "https://doi.org/10.1109/ACROSET66531.2025.11280738",
-        label: "Read via DOI",
-        note: "Primary",
-      },
-      {
         href: "https://www.semanticscholar.org/paper/Swasth-AI%3A-Unifying-India's-Fragmented-Healthcare-Singh-Tiwari/29a14a6bf25a401a35c65afffe56e33fd1066b6a#cited-papers",
         label: "Read via Semantic Scholar",
-        note: "Fallback",
-      },
-      {
-        href: "https://ieeexplore.ieee.org/document/11280738",
-        label: "Read via IEEE Xplore",
-        note: "Fallback",
       },
     ],
     meta: "Scopus-indexed publication",
@@ -101,35 +89,22 @@ function ResearchCard({ item }: { item: ResearchItem }) {
         {item.description}
       </p>
       {item.links?.length ? (
-        <div className="mt-5 space-y-3">
-          <div className="flex flex-wrap items-center gap-3">
-            {item.links.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group/link inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.04] px-3 py-2 text-sm font-medium text-white/72 transition-colors hover:border-white/20 hover:text-white focus:outline-none focus:ring-2 focus:ring-white/20"
-                aria-label={`${link.label} for ${item.title}`}
-              >
-                <span>{link.label}</span>
-                <span aria-hidden="true" className="transition-transform group-hover/link:translate-x-1">
-                  -&gt;
-                </span>
-              </a>
-            ))}
-          </div>
-          {item.links.length > 1 ? (
+        <div className="mt-5 flex flex-wrap items-center gap-3">
+          {item.links.map((link) => (
             <a
-              href={item.links[1].href}
+              key={link.href}
+              href={link.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-xs font-medium text-white/42 transition-colors hover:text-white/78 focus:outline-none focus:text-white"
-              aria-label={`Fallback paper options for ${item.title}`}
+              className="group/link inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.04] px-3 py-2 text-sm font-medium text-white/72 transition-colors hover:border-white/20 hover:text-white focus:outline-none focus:ring-2 focus:ring-white/20"
+              aria-label={`${link.label} for ${item.title}`}
             >
-              If the primary paper host does not open in your browser, use the fallback links above.
+              <span>{link.label}</span>
+              <span aria-hidden="true" className="transition-transform group-hover/link:translate-x-1">
+                -&gt;
+              </span>
             </a>
-          ) : null}
+          ))}
         </div>
       ) : null}
     </article>
