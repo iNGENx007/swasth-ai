@@ -1,12 +1,12 @@
-const WAITLIST_ENDPOINT = "https://formsubmit.co/ajax/chatgptkedalal@gmail.com"
+const WAITLIST_ENDPOINT = import.meta.env.VITE_WAITLIST_API_URL ?? "/api/waitlist"
 
 interface WaitlistPayload {
   email: string
   source: string
 }
 
-interface FormSubmitResponse {
-  success?: boolean | string
+interface WaitlistResponse {
+  success?: boolean
   message?: string
 }
 
@@ -20,24 +20,19 @@ export async function submitWaitlistSignup({ email, source }: WaitlistPayload) {
     body: JSON.stringify({
       email,
       source,
-      _subject: `New Swasth AI waitlist signup (${source})`,
-      _replyto: email,
-      _captcha: "false",
-      _template: "table",
-      _url: typeof window !== "undefined" ? window.location.href : "unknown",
       submittedAt: new Date().toISOString(),
       page: typeof window !== "undefined" ? window.location.href : "unknown",
       website: typeof window !== "undefined" ? window.location.hostname : "unknown",
     }),
   })
 
-  const data = (await response.json().catch(() => null)) as FormSubmitResponse | null
+  const data = (await response.json().catch(() => null)) as WaitlistResponse | null
 
   if (!response.ok) {
     throw new Error(data?.message ?? "Waitlist submission failed.")
   }
 
-  if (data?.success === false || data?.success === "false") {
+  if (data?.success === false) {
     throw new Error(data.message ?? "Waitlist submission failed.")
   }
 }
